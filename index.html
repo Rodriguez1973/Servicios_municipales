@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Servicios Municipales</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./css/estilos.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBeNRBEIWYeWRRvY8On_9pkSD1_J_zLykQ&libraries=geometry"></script>
+    <script src="./js/BdWebSQL.js" defer></script>
+    <script src="./js/GoogleMaps.js" defer></script>
+    <script src="./js/Index.js" defer></script>
+</head>
+
+<body>
+    <main>
+        <header class="cabecera">
+            <picture style="margin: 10px;">
+                <source media="(min-width: 500px)" srcset="images/Logo.png">
+                <img id="imagenTitulo" src="images/Logop.png" alt="Logo CIFP">
+            </picture>
+            <h1 id="titulo">Servicios Municipales</h1>
+        </header>
+
+
+        <article class="menu">
+            <ul>
+                <li>Buscar Familia
+                    <select id="FamiliaSeleccionada">
+                        <option value="">Seleccione Tipo</option>
+                        <option value="Gratuitos">Gratuitos</option>
+                        <option value="Mensuales">Mensuales</option>
+                        <option value="Anuales">Anuales</option>
+                        <option value="Indefinidos">Indefinidos</option>
+                    </select>
+                </li>
+                <li>
+                    <b>Fecha Solicitud:</b><input type="date" id="fechaDesde" />
+                </li>
+                <li>
+                    <b>Contacto Solicitud</b><input type="text" id="contacto" />
+                </li>
+                <li>
+                    <b>Teléfono</b><input type="text" id="telefono" />
+                </li>
+                <li>
+                    <b>Email</b><input type="text" id="email" />
+                </li>
+                <li>
+                    <img src="./images/lupa.jpg" id="lupa" /> </img>
+                </li>
+            </ul>
+        </article>
+
+
+        <article aria-label="Datos negocio" class="datosdelejercicio">
+            <header>
+                <h3>
+                    Servicios Municipales Disponibles
+                </h3>
+            </header>
+            <fieldset>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Duración</th>
+                            <th scope="col">Calle</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoServicios">
+                    </tbody>
+                </table>
+            </fieldset>
+        </article>
+
+
+        <article class="tablaRegistros">
+            <!-- Enlace de la opción de menú Listado Negocios-->
+            <a name="primera_seccion"></a>
+            <h3> Servicios Contratados </h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Importe</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpoPedido">
+                </tbody>
+            </table>
+        </article>
+
+
+        <article class="cajamapa">
+            <header>
+                <h3>
+                    Mapa
+                </h3>
+            </header>
+            <div class="map_canvas" id="map_canvas">
+            </div>
+        </article>
+
+
+        <footer class="pie">
+            T o t a l <input type="text" disabled="true" id="total" value="0" /> </br></br>
+            Desarrollo de Aplicaciones Web(<cite>DAW</cite>) &copy; CIFP Santa Catalina
+        </footer>
+    </main>
+</body>
+</html>
