@@ -146,7 +146,7 @@ function copiarDatos(evt) {
   crearTablaContratados() //Crea la tabla de servicios contratados.
 }
 
-//----------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 //Function que crea la tabla de servicios contratados.
 function crearTablaContratados() {
   cuerpoPedido.innerHTML=""
