@@ -1,5 +1,5 @@
 let serviciosMunicipales //Array que almacena los servicios municipales disponibles.
-
+let ServiciosContratados //Array que almacena los servicios contratados.
 
 //--------------------------------------------------------------------------------------------------
 //Creación de las referencias de los objetos del formulario.
@@ -11,13 +11,12 @@ const iEmail = document.getElementById('email')
 const lupa = document.getElementById('lupa')
 const cuerpoServicios = document.getElementById('cuerpoServicios')
 const cuerpoPedido = document.getElementById('cuerpoPedido')
-
+const iTotal = document.getElementById('total')
 
 //--------------------------------------------------------------------------------------------------
 //Definición de eventos de los objetos.
 lupa.addEventListener('click', leerServicios, false) //Evento click al pulsar sobre la lupa.
 sFamiliaSeleccionada.addEventListener('change', mostrarServicios, false) //Evento change al cambiar la familia seleccionada.
-
 
 //--------------------------------------------------------------------------------------------------
 //Clase se los Servicios Municipales.
@@ -49,12 +48,11 @@ class ServicioMunicipal {
   }
 }
 
-
 //--------------------------------------------------------------------------------------------------
 //Función que lee los registros de la base de datos.
 function leerServicios() {
-  serviciosMunicipales=new Array()  //Iniciliza el array de serviciosMunicipales.
-  serviciosContratados=new Array()  //Iniciliza el array de serviciosContratados.
+  serviciosMunicipales = new Array() //Iniciliza el array de serviciosMunicipales.
+  serviciosContratados = new Array() //Iniciliza el array de serviciosContratados.
   //Nueva transacción soble la base de datos.
   instanciaDB.transaction(function (tran) {
     //Realiza la consulta con todos los campos de la tabla servicios.
@@ -75,11 +73,10 @@ function leerServicios() {
         serviciosMunicipales.push(servicio)
       }
       mostrarServicios() //Muestra los servicios municipales en la tabla.
-      cuerpoPedido.innerHTML="" //Borra el contenido de la tabla servicios contratados.
+      cuerpoPedido.innerHTML = '' //Borra el contenido de la tabla servicios contratados.
     })
   })
 }
-
 
 //--------------------------------------------------------------------------------------------------
 //Función que muestra los servicios municipales en la tabla servicios municipales disponibles.
@@ -116,7 +113,6 @@ function mostrarServicios() {
   }
 }
 
-
 //--------------------------------------------------------------------------------------------------
 //Función que copia los datos a la tabla servicios contratados.
 function copiarDatos(evt) {
@@ -140,25 +136,43 @@ function copiarDatos(evt) {
   cantidad.type = 'number' //Define el input de tipo number.
   cantidad.min = 0 //Define el valor mínimo para el input de tipo number.
   //cantidad.max = 1000 //Define el valor máximo para el input de tipo number.
-  cantidad.registro = servicio.id - 1
+  cantidad.indiceArray = servicio.id - 1 //Creo un atributo para poder relaccionarlo con el índice del elemento en el array serviciosMunicipales. 
   cantidad.addEventListener('change', calcularImporte, false) //Añade el evento change al input.
   cantidad.addEventListener('keyup', calcularImporte, false) //Añade el evento keyup al input.
+  cantidad.addEventListener('focus', seleccionarContenido,false) //Añade el evento focus al input.
+  cantidad.value=0 //Establece el valor inicial de la cantidad.
   celda.appendChild(cantidad) //Añade el input a la celda.
   fila.appendChild(celda) //Añade la celda a la fila.
   celda = document.createElement('td') //Crea una celda.
-  celda.id = 'importe' + servicio.id
+  celda.id = 'importe' + servicio.id  //Crea un id para poder referenciarlo posteriormente.
   fila.appendChild(celda) //Añade la celda a la fila.
   celda.innerText = '0'
 }
 
-
 //--------------------------------------------------------------------------------------------------
 //Función para que calcula el importe.
 function calcularImporte(evt, servicio) {
+  //Si el vento es de tipo 'keyup' o 'change' en el input type number de cantidad.
   if (evt.type === 'keyup' || evt.type === 'change') {
-    let servicio = serviciosMunicipales[evt.target.registro]
+    let servicio = serviciosMunicipales[evt.target.indiceArray] //Registro en el que se ha producido el evento
     let cantidad = evt.target.value
-    let celda = document.getElementById('importe' + servicio.id)
-    celda.innerText = cantidad * servicio.precio
+    let celda = document.getElementById('importe' + servicio.id) //Obtiene la celda del importe.
+    let importeAnterior = celda.innerText //Recopila el importe anterior.
+    let importeActual = cantidad * servicio.precio //Importe de la cantidad del servicio contratado.
+    calcularTotal(importeAnterior, importeActual) //Actualiza el total.
+    celda.innerText = importeActual //Actualiza el importe.
   }
+}
+
+//--------------------------------------------------------------------------------------------------
+//Función que calcula el precio total.
+function calcularTotal(importeAnterior, importeActual) {
+  iTotal.value = iTotal.value - importeAnterior + importeActual
+}
+
+
+//--------------------------------------------------------------------------------------------------
+//Función que selecciona el contenido de la celda cantidad al hacer focus sobre ella.
+function seleccionarContenido(evt){
+    evt.target.select();
 }
