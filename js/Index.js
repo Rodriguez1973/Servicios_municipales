@@ -187,7 +187,6 @@ function calcularImporte(evt) {
   //Si el evento es de tipo 'keyup' o 'change' en el input type number de cantidad.
   if (evt.type === 'keyup' || evt.type === 'change') {
     let indice=serviciosContratados.findIndex(contratado=>contratado.id===evt.target.idContratado) //Busca el indice del servicio contratado en el array serviciosContratados.
-    console.log(indice)
     let contratado=serviciosContratados[indice] //Onbtiene el servicio contratado.
     let cantidad = evt.target.value //Lee el valor del input de la cantidad.
     contratado.cantidad=cantidad  //Actualiza la cantidad.
@@ -198,7 +197,6 @@ function calcularImporte(evt) {
     calcularTotal(importeAnterior, importeActual) //Actualiza el total.
     celda.innerText = importeActual //Actualiza el importe.
     serviciosContratados[indice]=contratado //Asigna el objeto en el indice del array una vez actualizado.
-    console.log(serviciosContratados[indice])
   }
 }
 
