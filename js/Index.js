@@ -1,6 +1,7 @@
 let serviciosMunicipales //Array que almacena los servicios municipales disponibles.
 let ServiciosContratados //Array que almacena los servicios contratados.
 
+
 //--------------------------------------------------------------------------------------------------
 //Creación de las referencias de los objetos del formulario.
 const sFamiliaSeleccionada = document.getElementById('FamiliaSeleccionada')
@@ -13,10 +14,12 @@ const cuerpoServicios = document.getElementById('cuerpoServicios')
 const cuerpoPedido = document.getElementById('cuerpoPedido')
 const iTotal = document.getElementById('total')
 
+
 //--------------------------------------------------------------------------------------------------
 //Definición de eventos de los objetos.
 lupa.addEventListener('click', leerServicios, false) //Evento click al pulsar sobre la lupa.
 sFamiliaSeleccionada.addEventListener('change', mostrarServicios, false) //Evento change al cambiar la familia seleccionada.
+
 
 //--------------------------------------------------------------------------------------------------
 //Clase se los Servicios Municipales.
@@ -48,6 +51,7 @@ class ServicioMunicipal {
   }
 }
 
+
 //--------------------------------------------------------------------------------------------------
 //Función que lee los registros de la base de datos.
 function leerServicios() {
@@ -77,6 +81,7 @@ function leerServicios() {
     })
   })
 }
+
 
 //--------------------------------------------------------------------------------------------------
 //Función que muestra los servicios municipales en la tabla servicios municipales disponibles.
@@ -112,6 +117,7 @@ function mostrarServicios() {
     celda.innerText = servicio.direccion //Añade la direccion.
   }
 }
+
 
 //--------------------------------------------------------------------------------------------------
 //Función que copia los datos a la tabla servicios contratados.
@@ -149,6 +155,7 @@ function copiarDatos(evt) {
   celda.innerText = '0'
 }
 
+
 //--------------------------------------------------------------------------------------------------
 //Función para que calcula el importe.
 function calcularImporte(evt, servicio) {
@@ -163,6 +170,7 @@ function calcularImporte(evt, servicio) {
     celda.innerText = importeActual //Actualiza el importe.
   }
 }
+
 
 //--------------------------------------------------------------------------------------------------
 //Función que calcula el precio total.
