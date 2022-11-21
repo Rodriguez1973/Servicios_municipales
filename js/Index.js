@@ -1,5 +1,5 @@
 let serviciosMunicipales //Array que almacena los servicios municipales disponibles.
-let ServiciosContratados //Array que almacena los servicios contratados.
+let serviciosContratados //Array que almacena los servicios contratados.
 
 //--------------------------------------------------------------------------------------------------
 //Creación de las referencias de los objetos del formulario.
@@ -41,10 +41,22 @@ class ServicioMunicipal {
     this.precio = precio
     this.duracion = duracion
   }
+}
 
-  //Devuelve los datos de un servicio.
-  getServicio() {
-    return this
+//--------------------------------------------------------------------------------------------------
+//Clase de los Servicios Contratados.
+class ServicioContratado {
+  //Constructor de objetos de la clase ServicioMunicipal.
+  constructor(
+    id, //Identificador.
+    descripcion, //Descripción.
+    precio, //Precio.
+  ) {
+    this.id = id
+    this.descripcion = descripcion
+    this.precio = precio
+    this.cantidad = 0
+    this.importe = 0
   }
 }
 
@@ -119,48 +131,74 @@ function copiarDatos(evt) {
   evt.target.disabled = true
   //Recupera el objeto correspondiente del array de serviciosMunicipales.
   let servicio = serviciosMunicipales[evt.target.value - 1]
-  mostrarPosicion(servicio)
-  let fila = document.createElement('tr') //Crea una fila.
-  cuerpoPedido.appendChild(fila) //Añade la fila a cuerpo de la tabla de los servicios contratados.
-  let celda = document.createElement('td') //Crea una celda.
-  fila.appendChild(celda) //Añade la celda a la fila.
-  celda.innerText = servicio.id //Añade el identificador.
-  celda = document.createElement('td') //Crea una celda.
-  fila.appendChild(celda) //Añade la celda a la fila.
-  celda.innerText = servicio.descripcion //Añade la descripción.
-  celda = document.createElement('td') //Crea una celda.
-  fila.appendChild(celda) //Añade la celda a la fila.
-  celda.innerText = servicio.precio //Añade el precio.
-  celda = document.createElement('td') //Crea una celda.
-  let cantidad = document.createElement('input') //Añade un input a la celda.
-  cantidad.type = 'number' //Define el input de tipo number.
-  cantidad.min = 0 //Define el valor mínimo para el input de tipo number.
-  //cantidad.max = 1000 //Define el valor máximo para el input de tipo number.
-  cantidad.indiceArray = servicio.id - 1 //Creo un atributo para poder relaccionarlo con el índice del elemento en el array serviciosMunicipales. 
-  cantidad.addEventListener('change', calcularImporte, false) //Añade el evento change al input.
-  cantidad.addEventListener('keyup', calcularImporte, false) //Añade el evento keyup al input.
-  cantidad.addEventListener('focus', seleccionarContenido,false) //Añade el evento focus al input.
-  cantidad.value=0 //Establece el valor inicial de la cantidad.
-  celda.appendChild(cantidad) //Añade el input a la celda.
-  fila.appendChild(celda) //Añade la celda a la fila.
-  celda = document.createElement('td') //Crea una celda.
-  celda.id = 'importe' + servicio.id  //Crea un id para poder referenciarlo posteriormente.
-  fila.appendChild(celda) //Añade la celda a la fila.
-  celda.innerText = '0'
+  //Crea un nuevo servicio contratado.
+  let servicioCont = new ServicioContratado(
+    servicio.id,
+    servicio.descripcion,
+    servicio.precio,
+  )
+  serviciosContratados.push(servicioCont) //Lo añade al array.
+  serviciosContratados.sort((a, b) => {
+    //Ordena el array por el el id.
+    return a.id - b.id
+  })
+  mostrarPosicion(servicio) //Muestra la posición del servicio contratado en el mapa.
+  crearTablaContratados() //Crea la tabla de servicios contratados.
+}
+
+//----------------------------------------------------------------------------------------------------
+//Function que crea la tabla de servicios contratados.
+function crearTablaContratados() {
+  cuerpoPedido.innerHTML=""
+  //Por cada servicio contratado
+  for (contratado of serviciosContratados) {
+    let fila = document.createElement('tr') //Crea una fila.
+    cuerpoPedido.appendChild(fila) //Añade la fila al cuerpo de la tabla de los servicios contratados.
+    let celda = document.createElement('td') //Crea una celda.
+    fila.appendChild(celda) //Añade la celda a la fila.
+    celda.innerText = contratado.id //Añade el identificador.
+    celda = document.createElement('td') //Crea una celda.
+    fila.appendChild(celda) //Añade la celda a la fila.
+    celda.innerText = contratado.descripcion //Añade la descripción.
+    celda = document.createElement('td') //Crea una celda.
+    fila.appendChild(celda) //Añade la celda a la fila.
+    celda.innerText = contratado.precio //Añade el precio.
+    celda = document.createElement('td') //Crea una celda.
+    let cantidad = document.createElement('input') //Añade un input a la celda.
+    cantidad.type = 'number' //Define el input de tipo number.
+    cantidad.min = 0 //Define el valor mínimo para el input de tipo number.
+    cantidad.idContratado=contratado.id //Crea atributo para poder referenciarlo en el array.
+    cantidad.addEventListener('change', calcularImporte, false) //Añade el evento change al input.
+    cantidad.addEventListener('keyup', calcularImporte, false) //Añade el evento keyup al input.
+    cantidad.addEventListener('focus', seleccionarContenido, false) //Añade el evento focus al input.
+    cantidad.value = contratado.cantidad //Establece el valor inicial de la cantidad.
+    celda.appendChild(cantidad) //Añade el input a la celda.
+    fila.appendChild(celda) //Añade la celda a la fila.
+    celda = document.createElement('td') //Crea una celda.
+    celda.id="importe"+contratado.id  //Identificador para poder referenciar el elemento.
+    fila.appendChild(celda) //Añade la celda a la fila.
+    celda.innerText = contratado.importe  //Importe.
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
 //Función para que calcula el importe.
-function calcularImporte(evt, servicio) {
-  //Si el vento es de tipo 'keyup' o 'change' en el input type number de cantidad.
+function calcularImporte(evt) {
+  //Si el evento es de tipo 'keyup' o 'change' en el input type number de cantidad.
   if (evt.type === 'keyup' || evt.type === 'change') {
-    let servicio = serviciosMunicipales[evt.target.indiceArray] //Registro en el que se ha producido el evento
-    let cantidad = evt.target.value
-    let celda = document.getElementById('importe' + servicio.id) //Obtiene la celda del importe.
+    let indice=serviciosContratados.findIndex(contratado=>contratado.id===evt.target.idContratado) //Busca el indice del servicio contratado en el array serviciosContratados.
+    console.log(indice)
+    let contratado=serviciosContratados[indice] //Onbtiene el servicio contratado.
+    let cantidad = evt.target.value //Lee el valor del input de la cantidad.
+    contratado.cantidad=cantidad  //Actualiza la cantidad.
+    let celda = document.getElementById('importe' + contratado.id) //Obtiene la celda del importe.
     let importeAnterior = celda.innerText //Recopila el importe anterior.
-    let importeActual = cantidad * servicio.precio //Importe de la cantidad del servicio contratado.
+    let importeActual = cantidad * contratado.precio //Importe de la cantidad del servicio contratado.
+    contratado.importe=importeActual //Actualiza el importe.
     calcularTotal(importeAnterior, importeActual) //Actualiza el total.
     celda.innerText = importeActual //Actualiza el importe.
+    serviciosContratados[indice]=contratado //Asigna el objeto en el indice del array una vez actualizado.
+    console.log(serviciosContratados[indice])
   }
 }
 
@@ -170,9 +208,8 @@ function calcularTotal(importeAnterior, importeActual) {
   iTotal.value = iTotal.value - importeAnterior + importeActual
 }
 
-
 //--------------------------------------------------------------------------------------------------
 //Función que selecciona el contenido de la celda cantidad al hacer focus sobre ella.
-function seleccionarContenido(evt){
-    evt.target.select();
+function seleccionarContenido(evt) {
+  evt.target.select()
 }
