@@ -1,6 +1,6 @@
 //Definiciones para la creación de la base de datos.
 const nombreBD = 'dbMunicipio' //Nombre de la base de datos.
-const numVersion = "1.0" //Número de versión.
+const numVersion = 1.0 //Número de versión.
 const descripcion = 'Venta de servicios municipales por pedido' //Descripción de la base de datos.
 const tamaño = 7 * 1024 * 1024 //Tamaño máximo de la base de datos 7MB.
 
